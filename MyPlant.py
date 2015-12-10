@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 
 def get_html():
-    '''#scraping data:'''
+    '''This function compiles a list of all plant urls from the website'''
     html_str = "http://www.missouribotanicalgarden.org/PlantFinder/ \
                 PlantFinderListResults.aspx?letter="
     missouri = "http://www.missouribotanicalgarden.org"
@@ -40,7 +40,8 @@ def get_html():
 
 
 def make_soup(plants):
-    '''text'''
+    '''make_soup takes plant urls from get_html and generates a
+    dictionary of plant information using BeautifulSoup'''
     plant_dict = dict()
     for plant in plants:
         r = requests.get(plant)
@@ -51,8 +52,9 @@ def make_soup(plants):
 
 
 def make_temp_dict(plant_dict):
-    '''This function extract inforamtion from web pages made by make_soup function
-    and make a dictionary for each plant.'''
+    '''This function extract inforamtion from web pages made by make_soup
+    and makes a dictionary for each plant. The dictionary consists of tabular
+    data, description, plant url, and image-url (if available)'''
     missouri = "http://www.missouribotanicalgarden.org"
     temp_dict = dict()
     for key, value in plant_dict.iteritems():
@@ -112,7 +114,7 @@ def make_temp_dict(plant_dict):
 
 def category_to_num(temp_dict):
     '''# convert some categorical features of plant profile \
-    (right column table) to numerical values:'''
+    (right column table) to numerical values'''
     # check if the plant blooms (ignore details of blooming/flower)
     set_flower = set()
     bloom_dict = dict()
@@ -155,7 +157,8 @@ def category_to_num(temp_dict):
 
 def make_table(dict_list, temp_dict, keys):
     '''make a matrix of some of the features of the table part \
-       of plant profile built by category_to_num function:'''
+       of plant profile built by category_to_num function. Also makes \
+       some new features.'''
     plant_table = defaultdict(list)
     name_list = ["Flower", "Maintenance", "Sun", "Water"]
     name_list2 = ["Height", "Spread"]
@@ -213,20 +216,26 @@ def make_table(dict_list, temp_dict, keys):
 
 
 def tokenize(doc):
-    '''ducument'''
+    '''this function sets lemmatizer/stemmer for each world of the given
+    document as argument.'''
     wordnet = WordNetLemmatizer()
     return [wordnet.lemmatize(word) for word in word_tokenize(doc.lower())]
 
 
 def tokenizer_(descriptions, tokenize, ngram=(1, 4), maxf=None):
+    '''tokenizer_ uses TfidfVectorizer to vectorize the description of each
+    plant and returns vectorized matrix. It also takes tokenize and  ngram
+    here quad-grams to capture important phrases in the document'''
     tfidf = TfidfVectorizer(stop_words='english', ngram_range=ngram,
                             strip_accents='unicode', max_features=maxf,
                             tokenizer=tokenize)
     vectorized = tfidf.fit_transform(descriptions)
-    return vectorized, tfidf
+    return vectorized
 
 
 def cosine_dist(plant, vectorized, njobz=1):
+    '''calculate pairwise distances (cosine) between plants and
+    returns list of similarities'''
     sims = pairwise_distances(vectorized[plant, :], vectorized,
                               metric='cosine', n_jobs=njobz)
     return sims
@@ -234,7 +243,7 @@ def cosine_dist(plant, vectorized, njobz=1):
 
 def plot_figure(eig):
     '''plot percentage of variance explained by each of the
-       selected components to decide how many components to keep'''
+    selected components to decide how many components to keep.'''
     plt.figure(figsize=(10, 6))
     plt.plot(eig, linewidth=5)
     plt.legend(prop={'size': 10})
@@ -269,6 +278,7 @@ if __name__ == "__main__":
 
     vectorized_all, tfidf_all = tokenizer_(descriptions, tokenize)
 
+    # use truncated SVD for sparce matrix:
     svd = TruncatedSVD(n_components=1000, algorithm="arpack")
     svd.fit(vectorized_all)
     reduced = svd.fit_transform(vectorized_all)
@@ -277,18 +287,22 @@ if __name__ == "__main__":
     plot_figure(eig)
 
     tfidf_redu = reduced[:, :150]
+
     # normalize the table matrix
     nrm = np.linalg.norm(table, axis=1)
     norm_table = table.copy()
     for i in xrange(table.shape[0]):
         norm_table[i, :] = table[i, :]/nrm[i]
+
     # normalize the svd matrix
     nrm = np.linalg.norm(tfidf_redu, axis=1)
     norm_tfidf_redu = tfidf_redu.copy()
     for i in xrange(tfidf_redu.shape[0]):
         norm_tfidf_redu[i, :] = tfidf_redu[i, :]/nrm[i]
+
     # concatinate the normalized svd and table matrices:
     final_mat = np.concatenate((norm_table, norm_tfidf_redu), axis=1)
+
     # calculate pairwise distances for selected plants
     plant = "anthurium andraeanum"
     sim = cosine_dist(keys.index(plant), final_mat)
