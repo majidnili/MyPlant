@@ -13,7 +13,6 @@ The two matrices from tabular and description parts of data are concatenated and
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium1.png)
 ## MyPlant: The webapp
 In the webapp homepage user enters either botanical or common name of a plant and recieves recommenation based on
-
-![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium2.png)
-## Here
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Homepage2.png)
+![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium2.png)
+
