@@ -11,5 +11,9 @@ Each plant page has a tabular (structured) and body (unstructured) data parts. I
 ## Results:
 The two matrices from tabular and description parts of data are concatenated and cosine similarity between the plants are calculated. The picture shows results for specific plant (Anthurium). Cosine similarity plots show that both structured (tabular) and unstructured (text) data play significant role in the final result.
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium1.png)
-## MyPlant the webapp
+## MyPlant: The webapp
+In the webapp homepage (shown bellow) user enters either botanical or common name of a plant
+![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Homepage2.png)
+and receives recommenations based on cosine similarity between plants. Here is few rercommendations for Anthurium.
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium2.png)
+
