@@ -9,4 +9,6 @@ Data is scraped from missouribotanicalgarden.org with about 7100 well documented
 ## Modeling:
 Each plant page has a tabular (structured) and body (unstructured) data parts. I converted the cathegorical features of tabular part into numerical and made few more features. I also vectorized the unstructured part using sklearn's quad-gram TfidfVectorizer and reduced the number of features with TruncatedSVD down to 150.
 
+![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium1.png)
 
+![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium2.png)
