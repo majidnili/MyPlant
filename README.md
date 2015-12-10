@@ -14,6 +14,6 @@ The two matrices from tabular and description parts of data are concatenated and
 ## MyPlant: The webapp
 In the webapp homepage (shown bellow) user enters either botanical or common name of a plant
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Homepage2.png)
-and receives recommenations based on cosine similarity between plants.
+and receives recommenations based on cosine similarity between plants. Here is few rercommendations for Anthurium.
 ![alt tag](https://raw.githubusercontent.com/majidnili/Myplant/master/images/Anthurium2.png)
 
